@@ -1,0 +1,13 @@
+.footer {
+  background-color: rgb(54, 54, 54);
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  height: 4rem;
+  line-height: 1.25rem
+}
+
+.footer-text {
+  color: rgb(221, 221, 221);
+  text-align: center
+}

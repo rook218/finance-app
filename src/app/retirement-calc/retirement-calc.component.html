@@ -1,0 +1,151 @@
+<div class="container">
+  <h1>Retirement Calculator</h1>
+  <div class="row">
+    <div class="col-xs-12 col-md-4">
+      <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div class="form-group">
+          <label for="start-principal">Starting Principal</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="start-principal" 
+            step="1000"
+            min="0"
+            name="startPrin"
+            value="20000"
+            required
+            ngModel
+            >
+        </div>
+        <div class="form-group">
+          <label for="int-rate">Interest Rate</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="int-rate" 
+            step="0.25"
+            min="0"
+            max="25"
+            name="intRate"
+            value="9.8"
+            required
+            ngModel>
+        </div>
+        <div class="form-group">
+          <label for="inflation">Expected Inflation</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="inflation"
+              min="0"
+              max="7"
+              name="inflation"
+              step="0.2"
+              value="3.4"
+              required
+              ngModel>
+          </div>
+        <div class="form-group">
+          <label for="yrContrib">Yearly Contribution</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="yrContrib"
+            min="0"
+            step="500"
+            name="yrContrib"
+            required
+            ngModel
+            value="5500">
+            <div class="form-check">
+              <input 
+                class="form-check-input" 
+                type="checkbox"
+                name="scaleInflation"
+                ngModel
+                id="scale-inflation">
+              <label class="form-check-label" for="scale-inflation">
+                Scale contributions with inflation
+              </label>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="yrs">Years until retirement</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="yrs"
+            min="0"
+            max="70"
+            name="yrsGrowth"
+            value="20"
+            required
+            ngModel>
+        </div>
+        <button 
+          class="btn btn-success"
+          type="button"
+          (click)="onDisplayOptions()">
+          Toggle more options
+        </button>
+        <div id="more-options" [ngClass]="{'hidden': !dispMoreOptions}">
+          <div class="form-group">
+            <label for="yrsRetired">Years of retirement</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="yrsRetired"
+              min="0"
+              max="70"
+              name="yrsRetired"
+              value="30"
+              step="1"
+              [required]="dispMoreOptions"
+              ngModel>
+          </div>
+          <div class="form-group">
+            <label for="retIncome">Yearly income desired at retirement</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="retIncome"
+              min="0"
+              max="1000000"
+              name="retIncome"
+              value="45000"
+              step="1000"
+              [required]="dispMoreOptions"
+              ngModel>
+          </div>
+        </div>
+        <hr>
+        <button 
+        class="btn btn-primary" 
+        [disabled]="!form.valid">Submit</button>
+        <p *ngIf="!form.valid">The form is missing required information.</p>
+      </form>
+    </div>
+    <div class="col-xs-12 col-md-8">
+      <div id="results" [ngClass]="{'hidden': !dispResults}">
+        <canvas id="growth-chart"></canvas>
+        <p id="results">You will have {{ retVal | currency:"USD" }} at retirement</p>
+        <p id="insufficient" >You will run out of your planned retirement income by </p>
+        <table class="table">
+          <tr>
+            <th>Year</th>
+            <th>Account Value</th>
+            <th>Interest earned this year</th>
+            <th *ngIf="dispMoreOptions">Adjusted retirement income needed</th>
+          </tr>
+          <tr *ngFor="let year of amortizationTable; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <th>{{ year['value'] | currency:"USD" }}</th>
+            <th>{{ year['interestAccrued'] | currency:"USD" }}</th>
+            <th *ngIf="dispMoreOptions">{{ year['retIncomeInflated'] | currency:"USD" }}</th>
+          </tr>
+        </table>
+      </div>
+      <h2 [ngClass]="{'hidden': dispResults}">Chart and table will appear here on form submission</h2>
+    </div>
+  </div>
+</div>

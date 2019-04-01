@@ -1,0 +1,7 @@
+.hidden {
+  display: none;
+}
+
+input.ng-invalid.ng-touched  {
+  border: 10px solid red;
+}
