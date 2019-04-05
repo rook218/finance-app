@@ -15,7 +15,9 @@ export class RetirementCalcComponent implements OnInit {
   dispResults: boolean = false;
   dispMoreOptions: boolean = false;
   accountForInflation: boolean = false;
-  insufficient: boolean = false;
+  sufficient: boolean = true;
+  yrsFailed: number;
+  expectedDataLength: number;
 
   chartCanvas;
   growthChart;
@@ -50,9 +52,9 @@ export class RetirementCalcComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.calcResults(form);
-      console.log(form);
       this.createChart();
       this.dispResults = true;
+      this.expectedDataLength = form.controls.yrsGrowth.value + form.controls.yrsRetired.value;
     }
   }
 
@@ -94,6 +96,7 @@ export class RetirementCalcComponent implements OnInit {
       const thisYear = {
         value: value,
         yearsLeft: yrsGrowth + yrsRetired,
+        yrContrib: yrContrib,
         retIncomeInflated: retIncome,
         retIncomeTaken: false,
         interestAccrued: interestAccrued
@@ -104,10 +107,12 @@ export class RetirementCalcComponent implements OnInit {
 
     // if the user wants the advanced options
     if (this.dispMoreOptions) {
-      if (value > 0) {
-        while (yrsRetired > 0) {
+      while (yrsRetired > 0) {
+        if (value >= 0) {
+          const baseValue = value;
           // accrue interest
           value *= (1 + (intRate / 100));
+          const interestAccrued = value - baseValue;
           // suffer inflation
           value *= ((100 - inflation) / 100 );
           // take income
@@ -118,20 +123,22 @@ export class RetirementCalcComponent implements OnInit {
           const thisYear = {
             value: value,
             yearsLeft: yrsGrowth + yrsRetired,
+            yrContrib: yrContrib,
             retIncomeInflated: retIncome,
             retIncomeTaken: true,
-            interestAccrued: Number(value - (startPrin + yrContrib))
+            interestAccrued: interestAccrued
           };
 
           this.amortizationTable.push(thisYear);
           yrsRetired--;
+          this.sufficient = true;
+        } else {
+          this.sufficient = false;
+          this.yrsFailed = this.expectedDataLength - this.amortizationTable.length + 2;
+          break;
         }
-      } else {
-        this.insufficient = true;
-        return;
       }
-      this.retVal = value;
-    } 
+    }
   }
 
   createChart() {

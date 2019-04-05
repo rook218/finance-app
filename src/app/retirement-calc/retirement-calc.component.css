@@ -3,5 +3,14 @@
 }
 
 input.ng-invalid.ng-touched  {
-  border: 10px solid red;
+  border: 1px solid red;
+}
+
+#insufficient {
+  color: red
+}
+
+.end-spacer {
+  height: 5rem;
+  display: block;
 }
