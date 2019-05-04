@@ -1,0 +1,187 @@
+<div class="container">
+  <h1 id="page-title">Budget Calculator</h1>
+    <form 
+      [formGroup]="budgetForm" 
+      (ngSubmit)="onSubmit()"
+      [ngClass]="{hidden: calculated}">
+      <div class="income budget-group">
+        <h1>Monthly Income</h1>
+        <label for="monthlyIncome">Monthly Net Income (after taxes and deductions)</label>
+        <input 
+          type="number" 
+          id="monthlyIncome" 
+          formControlName="monthlyIncome" 
+          class="form-control">
+      </div>
+      <div class="row row-no-margin">
+        <div class="col-xs-12 col-md-4">
+          <div class="essentials budget-group">
+            <h3>Essential expenses</h3>
+            <div class="form-group">
+              <label for="rent">Monthly rent</label>
+              <input 
+                type="number" 
+                id="rent" 
+                formControlName="rent" 
+                class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="utilities">Utilities</label>
+              <input 
+                type="number" 
+                id="utilities" 
+                formControlName="utilities" 
+                class="form-control">
+              <p>Include water, sewage, garbage, internet, electricity, cable, and phone here</p>
+            </div>
+            <div class="form-group">
+              <label for="groceries">Groceries</label>
+              <input 
+                type="number" 
+                id="groceries" 
+                formControlName="groceries" 
+                class="form-control">
+              <p>Include all essential food and non-food items (like cleaning supplies and batteries) but not luxury items
+                you buy at a grocery store (alcohol, candy, decorations, etc)!</p>
+            </div>
+            <div class="form-group">
+              <label for="debt">Debt repayment</label>
+              <input 
+                type="number" 
+                id="debt" 
+                formControlName="debt" 
+                class="form-control">
+              <p>Use the loan / debt calculator to see how much you can save by paying down your debt faster.</p>
+            </div>
+            <div class="form-group">
+              <label for="transportation">Transportation</label>
+              <input 
+                type="number" 
+                id="transportation" 
+                formControlName="transportation" 
+                class="form-control">
+              <p>Gas, bus passes, parking, car insurance, etc.</p>
+            </div>
+            <div class="form-group">
+              <label for="miscEssentials">Other essentials</label>
+              <input 
+                type="number" 
+                id="miscEssentials" 
+                formControlName="miscEssentials" 
+                class="form-control">
+              <p>Use this to account for childcare, school fees, alimony, gym memberships, insurance (if not part of your payroll deductions) and other necessary expenses.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <div class="luxuries budget-group">
+            <h3>Luxury Expenses</h3>
+            <div class="form-group">
+              <label for="eatingOut">Eating out</label>
+              <input 
+                type="number" 
+                id="eatingOut" 
+                formControlName="eatingOut" 
+                class="form-control">
+              <p>Include take-out, restaurants, and drinks</p>
+            </div>
+            <div class="form-group">
+              <label for="shopping">Shopping</label>
+              <input 
+                type="number" 
+                id="shopping" 
+                formControlName="shopping" 
+                class="form-control">
+              <p>This is a good place to account for all 'nice-to-haves' including unnecessary clothes, household goods, alcohol, candy and snacks, etc.</p>
+            </div>
+            <div class="form-group">
+              <label for="entertainment">Entertainment</label>
+              <input 
+                type="number" 
+                id="entertainment" 
+                formControlName="entertainment" 
+                class="form-control">
+              <p>Streaming services, concerts, video games, movie tickets, rentals, etc.</p>
+            </div>
+            <div class="form-group">
+              <label for="gifts">Gifts and Donations</label>
+              <input 
+                type="number" 
+                id="gifts" 
+                formControlName="gifts" 
+                class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <div class="goals budget-group">
+            <h3>Financial Goals</h3>
+            <div class="form-group">
+              <label for="retirement">Retirement Savings</label>
+              <input 
+                type="number" 
+                id="retirement" 
+                formControlName="retirement" 
+                class="form-control">
+              <p>If you're not sure how much you'll need to save, use the retirement calculator on this site!</p>
+            </div>
+            <div class="form-group">
+              <label for="emergency">Emergency Savings</label>
+              <input 
+                type="number" 
+                id="emergency" 
+                formControlName="emergency" 
+                class="form-control">
+              <p>Savings that you want to put toward emergency spending e.g. car repairs, home repairs, unexpected medical bills, etc.</p>
+            </div>
+            <div class="form-group">
+              <label for="investment">Other investment savings</label>
+              <input 
+                type="number" 
+                id="investment" 
+                formControlName="investment" 
+                class="form-control">
+              <p>Pay yourself first! Money invested is working hard for you and your family's future.</p>
+            </div>
+            <div class="form-group">
+              <label for="miscSavings">Miscellaneous Savings</label>
+              <input 
+                type="number" 
+                id="miscSavings" 
+                formControlName="miscSavings" 
+                class="form-control">
+              <p>Build up your fund for vacations, holiday giving, birthdays, etc.</p>
+            </div>
+          </div>
+        </div>
+        <button 
+          class="btn btn-primary btn-submit" 
+          [disabled]="budgetForm.invalid">Calculate 🠺</button>
+        <p 
+          class="help-block"
+          *ngIf="budgetForm.invalid">The form is missing required information</p>
+      </div>
+    </form>
+    <div 
+      id="results" 
+      [ngClass]="{hidden: !calculated}">
+        <div id="expenses">
+          <h2>Expenses by category</h2>
+          <canvas id="expenses-canvas"></canvas>
+          <span class="help-block">Shades of green are essential, orange are luxury, blue are savings.</span>
+        </div>
+        <div id="total">
+          <h2>Expenses vs. Income</h2>
+          <canvas id="exp-vs-income-canvas"></canvas>
+        </div>
+        <div id="ideal-budget">
+          <h2>Ideal budget</h2>
+          <canvas id="ideal-canvas"></canvas>
+          <!-- <div id="ideal-budget-results">
+              <p>Total income: {{ totals.income }}</p>
+              <p>Total expenses: {{ totals.totalExpenses }}</p>
+              <p>You are using {{ budgetPercent }} percent of your monthly budget!</p>
+          </div> -->
+        </div>
+    </div>
+</div>

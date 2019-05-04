@@ -1,0 +1,54 @@
+#page-title {
+  margin: 1rem
+}
+
+canvas {
+  width: 100%;
+}
+
+.row {
+  width: 100%
+}
+
+.form-group {
+  border: 1px solid rgba(0, 0, 0, 0)
+}
+
+.form-group label {
+  font-weight: bold
+}
+
+.budget-group {
+  border-radius: 4px;
+  padding: 15px;
+}
+  .income {
+    border: 2px solid rgb(40, 167, 69);
+    margin: 1rem;
+  }
+  .essentials, .income {
+    border: 2px solid rgb(40, 167, 69);
+  }
+  .luxuries {
+    border: 2px solid rgb(253, 126, 20);
+  }
+  .goals {
+    border: 2px solid rgb(46, 79, 228);
+  }
+
+.btn-submit {
+  margin: 1rem;
+  width: 100%
+}
+
+.row.row-no-margin {
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+input.ng-invalid.ng-touched  {
+  border: 1px solid red;
+}
