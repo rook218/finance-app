@@ -16,6 +16,7 @@ export class BudgetComponent implements OnInit {
 
   expensesGraph;
   budgetGraph;
+  idealGraph;
 
   totals;
   budgetPercent;
@@ -58,12 +59,14 @@ export class BudgetComponent implements OnInit {
 
   calcResults() {
     this.calculated = true;
-    
+
     this.createDataObject();
 
     this.createExpensesGraph();
 
     this.createBudgetGraph();
+
+    this.createIdealGraph();
 
   }
 
@@ -198,6 +201,124 @@ export class BudgetComponent implements OnInit {
 
   }
 
+  createIdealGraph() {
+
+    // TO DO - Create warnings of overspending
+    const ctx = document.querySelector('#ideal-canvas');
+
+    const income = this.totals.income;
+    const expenses = this.totals;
+    const essentials = {
+      rent: (income * 0.3),
+      utilities: expenses.essentials.utilities,
+      groceries: expenses.essentials.groceries,
+      debt: expenses.essentials.debt,
+      transportation: expenses.essentials.transportation,
+      miscEssentials: expenses.essentials.miscEssentials,
+    };
+
+    // if statements to make a logical budget
+    if (this.totals.essentials.rent <= essentials.rent) {
+      console.log('rent if statement triggered');
+      essentials.rent = this.totals.essentials.rent;
+    };
+    if (essentials.transportation > 300) {
+      essentials.transportation = 300;
+    }
+
+    const disposableIncome = Math.floor(income -
+                                        essentials.rent -
+                                        essentials.utilities -
+                                        essentials.groceries -
+                                        essentials.debt -
+                                        essentials.transportation -
+                                        essentials.miscEssentials);
+
+    // should add up to 0.6
+    const luxuries = {
+      eatingOut: Math.floor(disposableIncome * 0.15),
+      entertainment: Math.floor(disposableIncome * 0.1),
+      gifts: Math.floor(disposableIncome * 0.1),
+      shopping: Math.floor(disposableIncome * 0.15),
+    };
+
+    // should add up to 0.4
+    const goals = {
+      emergency: Math.floor(disposableIncome * 0.075),
+      investment: Math.floor(disposableIncome * 0.15),
+      miscSavings: Math.floor(disposableIncome * 0.025),
+      retirement: Math.floor(disposableIncome * 0.25),
+    };
+
+    const data = {
+      datasets: [{
+        data: [
+          essentials.rent,
+          essentials.utilities,
+          essentials.groceries,
+          essentials.debt,
+          essentials.transportation,
+          essentials.miscEssentials,
+
+          luxuries.eatingOut,
+          luxuries.shopping,
+          luxuries.entertainment,
+          luxuries.gifts,
+
+          goals.retirement,
+          goals.emergency,
+          goals.investment,
+          goals.miscSavings
+        ],
+        backgroundColor: [
+          // essentials (green, 6 of them)
+          'rgba(40, 167, 69, 0.9)',
+          'rgba(50, 170, 30, 0.9)',
+          'rgba(40, 200, 70, 0.9)',
+          'rgba(20, 220, 30, 0.9)',
+          'rgba(10, 150, 50, 0.9)',
+          'rgba(0, 230, 64, 0.9)',
+          // luxuries (orange, 4 of them)
+          'rgba(253, 100, 40, 0.9)',
+          'rgba(253, 70, 100, 0.9)',
+          'rgba(241, 90, 34, 0.9)',
+          'rgba(249, 191, 59, 0.9)',
+          // savings (blue, 4 of them)
+          'rgba(0, 181, 204, 0.9)',
+          'rgba(51, 110, 123, 0.9)',
+          'rgba(34, 167, 240, 0.9)',
+          'rgba(92, 151, 191, 0.9)'
+        ]
+      }],
+      labels: [
+        // essentials (6 of them)
+        'Rent',
+        'Utilities',
+        'Groceries',
+        'Debt',
+        'Transportation',
+        'Miscellaneous Essentials',
+        // luxuries (4 of them)
+        'Eating Out',
+        'Shopping',
+        'Entertainment',
+        'Gifts',
+        // savings (4 of them)
+        'Retirement',
+        'Emergency',
+        'Investment',
+        'Miscellaneous Savings'
+      ],
+    };
+
+    const chart = new Chart(ctx, {
+      type: 'doughnut',
+      data: data,
+      options: {}
+    });
+
+  }
+
   createDataObject() {
 
     // gobbledygook that just adds all the expenses so I can add it
@@ -233,8 +354,7 @@ export class BudgetComponent implements OnInit {
         miscSavings: this.budgetForm.value.miscSavings
       }
     };
-    this.budgetPercent  = Math.floor((this.totals.totalExpenses / this.totals.income) * 100)
+    this.budgetPercent  = Math.floor((this.totals.totalExpenses / this.totals.income) * 100);
   }
-
 
 }
