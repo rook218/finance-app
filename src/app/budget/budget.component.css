@@ -4,6 +4,7 @@
 
 canvas {
   width: 100%;
+  height: 100%
 }
 
 .row {
@@ -17,6 +18,10 @@ canvas {
 .form-group label {
   font-weight: bold
 }
+
+/* 
+  Form area
+*/
 
 .budget-group {
   border-radius: 4px;
@@ -45,10 +50,42 @@ canvas {
   margin: 0;
 }
 
-.hidden {
+/* 
+  The results page
+*/
+
+#results {
+  width: 90vw;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 33.33% 33.33% 33.33%
+}
+
+#results > div h2 {
+  text-align: center;
+}
+
+/* 
+  Fancy sauce extras for nice formatting
+*/
+
+#results.hidden {
   display: none;
 }
 
 input.ng-invalid.ng-touched  {
   border: 1px solid red;
+}
+
+@media (max-width: 1200px) {
+  #results {
+    width: 90vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column
+  }
+  
+  #results > div {
+    flex: none;
+  }
 }

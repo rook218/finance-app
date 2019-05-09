@@ -150,7 +150,10 @@ export class BudgetComponent implements OnInit {
     this.expensesGraph = new Chart(ctx, {
       type: 'doughnut',
       data: data,
-      options: {}
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+      }
     });
   }
 
@@ -195,7 +198,10 @@ export class BudgetComponent implements OnInit {
       const chart = new Chart(ctx, {
         type: 'doughnut',
         data: data,
-        options: {}
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+        }
       });
     }
 
@@ -314,7 +320,10 @@ export class BudgetComponent implements OnInit {
     const chart = new Chart(ctx, {
       type: 'doughnut',
       data: data,
-      options: {}
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+      }
     });
 
   }

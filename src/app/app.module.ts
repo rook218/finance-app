@@ -5,18 +5,19 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RetirementCalcComponent } from './retirement-calc/retirement-calc.component';
-import { EncyclopediaComponent } from './encyclopedia/encyclopedia.component';
-import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
+import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { GuideComponent } from './guide/guide.component';
+import { RetirementCalcComponent } from './retirement-calc/retirement-calc.component';
+import { LoanComponent } from './loan/loan.component';
 import { BudgetComponent } from './budget/budget.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'encyclopeida', component: EncyclopediaComponent},
+  {path: 'beginner-guide', component: GuideComponent},
   {path: 'retirement', component: RetirementCalcComponent},
-  // {path: 'loan', component: HomeComponent},
+  {path: 'loan', component: LoanComponent},
   {path: 'budget', component: BudgetComponent}
 ];
 
@@ -24,11 +25,12 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     RetirementCalcComponent,
-    EncyclopediaComponent,
+    GuideComponent,
     HeaderComponent,
     HomeComponent,
     FooterComponent,
-    BudgetComponent
+    BudgetComponent,
+    LoanComponent
   ],
 
   imports: [
