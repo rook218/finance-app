@@ -32,7 +32,6 @@ const appRoutes: Routes = [
     BudgetComponent,
     LoanComponent
   ],
-
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -42,9 +41,7 @@ const appRoutes: Routes = [
       appRoutes
     )
   ],
-
   providers: [],
-
   bootstrap: [AppComponent]
 
 })
