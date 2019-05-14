@@ -35,7 +35,6 @@ canvas {
 }
 
 .income {
-  border: 2px solid rgb(40, 167, 69);
   margin: 1rem;
 }
 .essentials, .income {
