@@ -1,0 +1,27 @@
+#results {
+  width: 90vw;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 33.33% 33.33% 33.33%
+}
+
+#results > div h2 {
+  text-align: center;
+}
+
+/* 
+  Fancy sauce extras for nice formatting
+*/
+
+@media (max-width: 1600px) {
+  #results {
+    width: 70vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column
+  }
+  
+  #results > div {
+    flex: none;
+  }
+}

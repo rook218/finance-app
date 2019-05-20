@@ -11,14 +11,16 @@ import { FooterComponent } from './footer/footer.component';
 import { GuideComponent } from './guide/guide.component';
 import { RetirementCalcComponent } from './retirement-calc/retirement-calc.component';
 import { LoanComponent } from './loan/loan.component';
-import { BudgetComponent } from './budget/budget.component';
+import { BudgetCalcComponent } from './budget/budget-calc.component';
+import { BudgetResultsComponent } from './budget/budget-results/budget-results.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'beginner-guide', component: GuideComponent},
   {path: 'retirement', component: RetirementCalcComponent},
   {path: 'loan', component: LoanComponent},
-  {path: 'budget', component: BudgetComponent}
+  {path: 'budget', component: BudgetCalcComponent},
+  {path: 'budget/results', component: BudgetResultsComponent}
 ];
 
 @NgModule({
@@ -29,7 +31,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     HomeComponent,
     FooterComponent,
-    BudgetComponent,
+    BudgetCalcComponent,
+    BudgetResultsComponent,
     LoanComponent
   ],
   imports: [

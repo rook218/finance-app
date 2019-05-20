@@ -1,83 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Injectable } from '@angular/core';
 
 import { Chart } from 'chart.js';
 
-@Component({
-  selector: 'app-budget',
-  templateUrl: './budget.component.html',
-  styleUrls: ['./budget.component.css']
+@Injectable({
+  providedIn: 'root'
 })
-export class BudgetComponent implements OnInit {
 
-  budgetForm: FormGroup;
-  formPage = 1;
-  calculated = false;
+export class BudgetService {
 
-  expensesGraph;
-  budgetGraph;
-  idealGraph;
+  constructor() { }
 
   totals;
-  budgetPercent;
 
-  ngOnInit() {
-    this.budgetForm = new FormGroup({
+  createDataObject(budgetForm) {
 
-      // essentials
-      'monthlyIncome': new FormControl(null, Validators.required),
-      'rent': new FormControl(null, Validators.required),
-      'utilities': new FormControl(null, Validators.required),
-      'groceries': new FormControl(null, Validators.required),
-      'debt': new FormControl(null, Validators.required),
-      'transportation': new FormControl(null, Validators.required),
-      'miscEssentials': new FormControl(null, Validators.required),
-
-      // luxuries
-      'eatingOut': new FormControl(null, Validators.required),
-      'shopping': new FormControl(null, Validators.required),
-      'entertainment': new FormControl(null, Validators.required),
-      'gifts': new FormControl(null, Validators.required),
-
-      // goals
-      'retirement': new FormControl(null, Validators.required),
-      'emergency': new FormControl(null, Validators.required),
-      'investment': new FormControl(null, Validators.required),
-      'miscSavings': new FormControl(null, Validators.required)
+    // gobbledygook that just adds all the expenses so I can add it
+    // to my object
+    const expenses = Object.values(budgetForm.value);
+    expenses.splice(0, 1);
+    let totalExpenses = 0;
+    expenses.forEach((expense: number) => {
+      totalExpenses += expense;
     });
-    this.formPage = 1;
+
+    this.totals = {
+      income: budgetForm.value.monthlyIncome,
+      totalExpenses: totalExpenses,
+      essentials: {
+        rent: budgetForm.value.rent,
+        utilities: budgetForm.value.utilities,
+        groceries: budgetForm.value.groceries,
+        debt: budgetForm.value.debt,
+        transportation: budgetForm.value.transportation,
+        miscEssentials: budgetForm.value.miscEssentials,
+      },
+      luxuries: {
+        eatingOut: budgetForm.value.eatingOut,
+        shopping: budgetForm.value.shopping,
+        entertainment: budgetForm.value.entertainment,
+        gifts: budgetForm.value.gifts
+      },
+      savings: {
+        retirement: budgetForm.value.retirement,
+        emergency: budgetForm.value.emergency,
+        investment: budgetForm.value.investment,
+        miscSavings: budgetForm.value.miscSavings
+      }
+    };
+    this.totals['budgetPercent'] = Math.floor((this.totals.totalExpenses / this.totals.income) * 100);
   }
 
-  nextPage() {
-    this.formPage++;
-  }
-
-  onSubmit() {
-    this.nextPage();
-    this.calcResults();
-  }
-
-  calcResults() {
-    this.calculated = true;
-
-    this.createDataObject();
-
-    this.createExpensesGraph();
-
-    this.createBudgetGraph();
-
-    this.createIdealGraph();
-
-  }
-
-  createExpensesGraph() {
-    this.expensesGraph = document.querySelector('#expenses-canvas');
-
-    const ctx = this.expensesGraph;
+  createExpensesGraphData() {
+    const ctx = document.querySelector('#expenses-canvas');
 
     const data = {
       labels: [
-
         // essentials (6 of them)
         'Rent',
         'Utilities',
@@ -103,24 +80,24 @@ export class BudgetComponent implements OnInit {
         data: [
 
           // essentials (6 of them)
-          this.budgetForm.value.rent,
-          this.budgetForm.value.utilities,
-          this.budgetForm.value.groceries,
-          this.budgetForm.value.debt,
-          this.budgetForm.value.transportation,
-          this.budgetForm.value.miscEssentials,
+          this.totals.essentials.rent,
+          this.totals.essentials.utilities,
+          this.totals.essentials.groceries,
+          this.totals.essentials.debt,
+          this.totals.essentials.transportation,
+          this.totals.essentials.miscEssentials,
 
           // luxuries (4 of them)
-          this.budgetForm.value.eatingOut,
-          this.budgetForm.value.shopping,
-          this.budgetForm.value.entertainment,
-          this.budgetForm.value.gifts,
+          this.totals.luxuries.eatingOut,
+          this.totals.luxuries.shopping,
+          this.totals.luxuries.entertainment,
+          this.totals.luxuries.gifts,
 
           // savings (4 of them)
-          this.budgetForm.value.retirement,
-          this.budgetForm.value.emergency,
-          this.budgetForm.value.investment,
-          this.budgetForm.value.miscSavings
+          this.totals.savings.retirement,
+          this.totals.savings.emergency,
+          this.totals.savings.investment,
+          this.totals.savings.miscSavings
         ],
         backgroundColor: [
           // essentials (green, 6 of them)
@@ -144,21 +121,12 @@ export class BudgetComponent implements OnInit {
           'rgba(92, 151, 191, 0.9)'
         ]
       }]
-
     };
 
-    this.expensesGraph = new Chart(ctx, {
-      type: 'doughnut',
-      data: data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-      }
-    });
+    this.totals.expensesData = data;
   }
 
-  createBudgetGraph() {
-
+  createBudgetGraphData() {
     const ctx = document.querySelector('#exp-vs-income-canvas');
 
     const totalExpenses = this.totals.totalExpenses;
@@ -176,14 +144,9 @@ export class BudgetComponent implements OnInit {
         }],
         labels: ['Budget broken by']
       };
+      this.totals.budgetData = data;
 
-      const chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: data,
-        options: {}
-      });
     } else {
-
       const data = {
         datasets: [{
           data: [totalExpenses, (totalIncome - totalExpenses)],
@@ -194,21 +157,11 @@ export class BudgetComponent implements OnInit {
         }],
         labels: ['Total Expenses', 'Remaining Cash']
       };
-
-      const chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: data,
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-        }
-      });
+      this.totals.budgetData = data;
     }
-
   }
 
-  createIdealGraph() {
-
+  createIdealGraphData() {
     // TO DO - Create warnings of overspending
     const ctx = document.querySelector('#ideal-canvas');
 
@@ -225,9 +178,8 @@ export class BudgetComponent implements OnInit {
 
     // if statements to make a logical budget
     if (this.totals.essentials.rent <= essentials.rent) {
-      console.log('rent if statement triggered');
       essentials.rent = this.totals.essentials.rent;
-    };
+    }
     if (essentials.transportation > 300) {
       essentials.transportation = 300;
     }
@@ -317,53 +269,29 @@ export class BudgetComponent implements OnInit {
       ],
     };
 
-    const chart = new Chart(ctx, {
-      type: 'doughnut',
-      data: data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-      }
-    });
-
+    this.totals.idealData = data;
   }
 
-  createDataObject() {
+  deleteExtraData() {
+    console.log('before deleteExtraData');
+    console.log(this.totals);
 
-    // gobbledygook that just adds all the expenses so I can add it
-    // to my object
-    let expenses = Object.values(this.budgetForm.value);
-    expenses.splice(0, 1);
-    let totalExpenses = 0;
-    expenses.forEach((expense: number) => {
-      totalExpenses += expense;
-    });
+    delete this.totals.essentials;
+    delete this.totals.luxuries;
+    delete this.totals.savings;
 
-    this.totals = {
-      income: this.budgetForm.value.monthlyIncome,
-      totalExpenses: totalExpenses,
-      essentials: {
-        rent: this.budgetForm.value.rent,
-        utilities: this.budgetForm.value.utilities,
-        groceries: this.budgetForm.value.groceries,
-        debt: this.budgetForm.value.debt,
-        transportation: this.budgetForm.value.transportation,
-        miscEssentials: this.budgetForm.value.miscEssentials,
-      },
-      luxuries: {
-        eatingOut: this.budgetForm.value.eatingOut,
-        shopping: this.budgetForm.value.shopping,
-        entertainment: this.budgetForm.value.entertainment,
-        gifts: this.budgetForm.value.gifts
-      },
-      savings: {
-        retirement: this.budgetForm.value.retirement,
-        emergency: this.budgetForm.value.emergency,
-        investment: this.budgetForm.value.investment,
-        miscSavings: this.budgetForm.value.miscSavings
-      }
-    };
-    this.budgetPercent  = Math.floor((this.totals.totalExpenses / this.totals.income) * 100);
+    console.log('after deleteExtraData');
+    console.log(this.totals);
   }
 
+  createGraph(canvas, data) {
+      const chart = new Chart(canvas, {
+        type: 'doughnut',
+        data: data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+        }
+      });
+    }
 }

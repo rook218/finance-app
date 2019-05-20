@@ -1,0 +1,30 @@
+<div id="results">
+  <div id="expenses">
+    <h2>Expenses by category</h2>
+    <canvas id="expenses-canvas"></canvas>
+  </div>
+  <div id="total">
+    <h2>Expenses vs. Income</h2>
+    <canvas id="exp-vs-income-canvas"></canvas>
+    <!-- <div *ngIf="totals.income" id="ideal-budget-results">
+          <p>Total income: {{ totals.income }}</p>
+          <p>Total expenses: {{ totals.totalExpenses }}</p>
+          <p>You are using {{ budgetPercent }} percent of your monthly budget!</p>
+      </div> -->
+  </div>
+  <div id="ideal-budget">
+    <h2>Ideal budget</h2>
+    <canvas id="ideal-canvas"></canvas>
+  </div>
+  <!-- 
+        make a table to show all categories and compare the actual
+        and ideal. This will require splitting the components and
+        making a service and I'd rather deploy it first, get a job
+        and add the functionality later. 
+        
+        Splitting the components will also solve the problem of needing
+        to render the HTML template before the TS file so there are
+        canvases to attach to, but needing to render the TS file before
+        the HTML element so there is totals.income etc data to populate
+       -->
+</div>
