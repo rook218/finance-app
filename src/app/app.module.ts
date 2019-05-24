@@ -42,7 +42,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes
-    )
+    ),
   ],
   providers: [],
   bootstrap: [AppComponent]
