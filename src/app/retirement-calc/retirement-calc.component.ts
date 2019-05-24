@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { Chart } from 'chart.js';
@@ -11,11 +11,11 @@ import { Chart } from 'chart.js';
 })
 export class RetirementCalcComponent implements OnInit {
   amortizationTable = [];
-  retVal: number = 0;
-  dispResults: boolean = false;
-  dispMoreOptions: boolean = false;
-  accountForInflation: boolean = false;
-  sufficient: boolean = true;
+  retVal = 0;
+  dispResults = false;
+  dispMoreOptions = false;
+  accountForInflation = false;
+  sufficient = true;
   yrsFailed: number;
   expectedDataLength: number;
 
@@ -43,8 +43,9 @@ export class RetirementCalcComponent implements OnInit {
         }]
       }
     });
-  }
 
+  }
+  
   onDisplayOptions() {
     this.dispMoreOptions = !this.dispMoreOptions;
   }
@@ -142,12 +143,11 @@ export class RetirementCalcComponent implements OnInit {
   }
 
   createChart() {
-
     // reset the canvas to avoid the weird hover bug
     this.growthChart.destroy();
     // This creates an array of labeled years for the graph to work properly
     const labels = [];
-    let i: number = 1;
+    let i = 1;
     this.amortizationTable.forEach((e) => {
       labels.push(i);
       i++;

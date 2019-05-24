@@ -5,6 +5,10 @@
       <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group">
           <label for="start-principal">Starting Principal</label>
+          <span 
+            class="badge badge-info">i
+            <span class="info">The amount of money you currently have, ready to invest or already invested</span>
+          </span>
           <input 
             type="number" 
             class="form-control" 
@@ -14,11 +18,14 @@
             name="startPrin"
             value="20000"
             required
-            ngModel
-            >
+            ngModel>
         </div>
         <div class="form-group">
           <label for="int-rate">Interest Rate</label>
+          <span 
+            class="badge badge-info">i
+            <span class="info">The stock market tends to return about 9.8% annually. Lower it to 6% or 7% if you want to simulate a safer portfolio with a mix of stocks and bonds.</span>
+          </span>
           <input 
             type="number" 
             class="form-control" 
@@ -27,12 +34,15 @@
             min="0"
             max="25"
             name="intRate"
-            value="9.8"
             required
             ngModel>
         </div>
         <div class="form-group">
           <label for="inflation">Expected Inflation</label>
+          <div 
+            class="badge badge-info">i
+            <span class="info">Average annual inflation in the US is 3.4% per year.</span>
+        </div>
             <input 
               type="number" 
               class="form-control" 
@@ -47,6 +57,10 @@
           </div>
         <div class="form-group">
           <label for="yrContrib">Yearly Contribution</label>
+          <div 
+            class="badge badge-info">i
+            <span class="info">The amount you can contribute to your retirement every year. </span>
+          </div>
           <input 
             type="number" 
             class="form-control" 
@@ -71,6 +85,10 @@
         </div>
         <div class="form-group">
           <label for="yrs">Years until retirement</label>
+          <div 
+            class="badge badge-info">i
+            <span class="info">How many years you plan on working before retirement.</span>
+          </div>
           <input 
             type="number" 
             class="form-control" 
@@ -91,6 +109,10 @@
         <div id="more-options" [ngClass]="{'hidden': !dispMoreOptions}">
           <div class="form-group">
             <label for="yrsRetired">Years of retirement</label>
+            <div 
+              class="badge badge-info">i
+              <span class="info">How many years you plan on living after retirement.</span>
+          </div>
             <input 
               type="number" 
               class="form-control" 
@@ -104,7 +126,11 @@
               ngModel>
           </div>
           <div class="form-group">
-            <label for="retIncome">Yearly income desired at retirement (in present dollars)</label>
+            <label for="retIncome">Yearly income desired at retirement</label>
+            <div 
+              class="badge badge-info">i
+              <span class="info">In present dollars, how much will you withdraw from your retirement account every year?</span>
+            </div>
             <input 
               type="number" 
               class="form-control" 
