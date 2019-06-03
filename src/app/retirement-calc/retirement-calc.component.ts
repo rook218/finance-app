@@ -45,7 +45,7 @@ export class RetirementCalcComponent implements OnInit {
     });
 
   }
-  
+
   onDisplayOptions() {
     this.dispMoreOptions = !this.dispMoreOptions;
   }
@@ -67,9 +67,10 @@ export class RetirementCalcComponent implements OnInit {
     const inflation =  Number(thisForm.inflation.value);
 
     let yrContrib =  Number(thisForm.yrContrib.value);
-    let yrsGrowth =  Number(thisForm.yrsGrowth.value);
+    let yrsGrowth =  Number(thisForm.retAge.value - thisForm.currentAge.value);
     let yrsRetired = Number(thisForm.yrsRetired.value);
     let retIncome =  Number(thisForm.retIncome.value);
+    let userAge = Number(thisForm.currentAge.value);
 
     // resets the table so it doesn't keep appending new form
     // submissions to old data
@@ -84,24 +85,33 @@ export class RetirementCalcComponent implements OnInit {
       }
       // add the yearly contribution at the start of the year
       value += yrContrib;
-      // account for inflation before accruing interest
-      value *= ((100 - inflation) / 100 );
-      const baseValue = value; // this is a garbage value to calc interest
+
+      // ** NOTE ** the below code is bad design, since it applies interest rate to regular dollars
+      // it would be good for an advanced feature that puts everything in present dollars but
+      // right now it only double-hits users for inflation and makes retirement almost impossible
+      // value *= ((100 - inflation) / 100 );
+
+      const baseValue = value; // this is a garbage value to calc interest accrued this year
       // accrue interest
       value *= ((100 + intRate) / 100 );
-      const interestAccrued = value - baseValue; // this calcs interest based on garbage value above
+      const interestAccrued = Math.floor(value - baseValue); // this calcs interest based on garbage value above
       // take off a year
       yrsGrowth--;
       // adjust retirement income for inflation
       retIncome *= ((100 + inflation) / 100 );
+      // increment age
+      userAge++;
+      // add all to an object
       const thisYear = {
-        value: value,
+        value: Math.floor(value),
         yearsLeft: yrsGrowth + yrsRetired,
-        yrContrib: yrContrib,
-        retIncomeInflated: retIncome,
+        yrContrib: Math.floor(yrContrib),
+        retIncomeInflated: Math.floor(retIncome),
         retIncomeTaken: false,
-        interestAccrued: interestAccrued
+        interestAccrued: Math.floor(interestAccrued),
+        userAge: userAge
       };
+      // push the object to our aray
       this.amortizationTable.push(thisYear);
       this.retVal = value;
     }
@@ -114,20 +124,21 @@ export class RetirementCalcComponent implements OnInit {
           // accrue interest
           value *= (1 + (intRate / 100));
           const interestAccrued = value - baseValue;
-          // suffer inflation
-          value *= ((100 - inflation) / 100 );
           // take income
           value -= retIncome;
           // adjust retirement income for inflation
           retIncome *= ((100 + inflation) / 100 );
-
+          // increment age
+          userAge++;
+          // add all to an object
           const thisYear = {
-            value: value,
+            value: Math.floor(value),
             yearsLeft: yrsGrowth + yrsRetired,
-            yrContrib: yrContrib,
-            retIncomeInflated: retIncome,
-            retIncomeTaken: true,
-            interestAccrued: interestAccrued
+            yrContrib: Math.floor(yrContrib),
+            retIncomeInflated: Math.floor(retIncome),
+            retIncomeTaken: false,
+            interestAccrued: Math.floor(interestAccrued),
+            userAge: userAge
           };
 
           this.amortizationTable.push(thisYear);
@@ -148,9 +159,8 @@ export class RetirementCalcComponent implements OnInit {
     // This creates an array of labeled years for the graph to work properly
     const labels = [];
     let i = 1;
-    this.amortizationTable.forEach((e) => {
-      labels.push(i);
-      i++;
+    this.amortizationTable.forEach((element) => {
+      labels.push(element.userAge);
     });
 
     // this gets only the value attribute and pushes it to an array

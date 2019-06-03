@@ -83,22 +83,34 @@
               </label>
             </div>
         </div>
-        <div class="form-group">
-          <label for="yrs">Years until retirement</label>
-          <div 
-            class="badge badge-info">i
-            <span class="info">How many years you plan on working before retirement.</span>
+        <div class="form-group-half-container">
+
+          <div class="form-group form-group-half">
+            <label for="currentAge">Your current age</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="currentAge"
+              min="0"
+              max="70"
+              name="currentAge"
+              value="20"
+              required
+              ngModel>
           </div>
-          <input 
-            type="number" 
-            class="form-control" 
-            id="yrs"
-            min="0"
-            max="70"
-            name="yrsGrowth"
-            value="20"
-            required
-            ngModel>
+          <div class="form-group form-group-half">
+            <label for="retAge">Target retirement age</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="retAge"
+              min="0"
+              max="70"
+              name="retAge"
+              value="20"
+              required
+              ngModel>
+          </div>
         </div>
         <button 
           class="btn btn-success"
@@ -157,15 +169,17 @@
         <p id="results">You will have {{ retVal | currency:"USD" }} at retirement <span *ngIf="!sufficient">and will run out of savings {{ yrsFailed }} years before you planned.</span></p>
         <table class="table">
           <tr>
-            <th>Year</th>
+            <th>Age</th>
             <th>Account Value</th>
             <th>Interest earned this year</th>
+            <th>Total growth this year</th>
             <th *ngIf="dispMoreOptions">Adjusted retirement income needed</th>
           </tr>
           <tr *ngFor="let year of amortizationTable; let i = index">
-            <th scope="row">{{ i + 1 }}</th>
+            <th scope="row">{{ year['userAge'] }}</th>
             <th>{{ year['value'] | currency:"USD" }}</th>
             <th>{{ year['interestAccrued'] | currency:"USD" }}</th>
+            <th>{{ year['interestAccrued'] + year['yrContrib'] | currency:"USD" }}</th>
             <th *ngIf="dispMoreOptions">{{ year['retIncomeInflated'] | currency:"USD" }}</th>
           </tr>
         </table>

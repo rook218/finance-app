@@ -12,6 +12,15 @@ input {
   display: none;
 }
 
+.form-group-half-container {
+  display: flex;
+  justify-content: space-between
+}
+
+.form-group-half {
+  width: 48%
+}
+
 input.ng-invalid.ng-touched  {
   border: 1px solid red;
 }
